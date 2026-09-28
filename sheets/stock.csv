@@ -1,0 +1,41 @@
+id,vehicle,size,price,shop,godown
+brezza-205-60-r16,Maruti Brezza,205/60 R16,"₹2,500",5,3
+ertiga-185-65-r15,Maruti Ertiga,185/65 R15,"₹2,300–₹2,500",4,2
+nios-175-60-r15,Hyundai Grand i10 Nios,175/60 R15,"₹2,300–₹2,500",3,2
+i20-195-55-r16,Hyundai i20,195/55 R16,"₹2,500",5,2
+venue-215-60-r16,Hyundai Venue,215/60 R16,"₹2,500",2,2
+creta-205-65-r16,Hyundai Creta,205/65 R16,"₹2,500",6,3
+creta-215-60-r17,Hyundai Creta,215/60 R17,"₹3,000–₹3,500",2,1
+sonet-215-60-r16,Kia Sonet,215/60 R16,"₹2,500",4,2
+seltos-215-60-r17,Kia Seltos,215/60 R17,"₹3,000–₹3,500",1,1
+punch-195-60-r16,Tata Punch,195/60 R16,"₹2,500",6,4
+nexon-215-60-r16,Tata Nexon,215/60 R16,"₹2,500",3,2
+xuv300-215-55-r17,Mahindra XUV300,215/55 R17,"₹3,000–₹3,500",1,3
+xuv700-235-65-r17,Mahindra XUV700,235/65 R17,"₹3,000–₹3,500",3,0
+xuv700-235-60-r18,Mahindra XUV700,235/60 R18,"₹4,000–₹5,000",0,2
+scorpio-245-65-r17,Mahindra Scorpio-N,245/65 R17,"₹3,000–₹3,500",2,2
+scorpio-255-60-r18,Mahindra Scorpio-N,255/60 R18,"₹4,000–₹5,000",1,0
+innova-205-65-r16,Toyota Innova Crysta,205/65 R16,"₹2,500",4,3
+hyryder-215-60-r17,Toyota Hyryder,215/60 R17,"₹3,000–₹3,500",2,3
+city-185-55-r16,Honda City,185/55 R16,"₹2,500",6,0
+amaze-175-65-r15,Honda Amaze,175/65 R15,"₹2,300–₹2,500",5,3
+hector-215-60-r17,MG Hector,215/60 R17,"₹3,000–₹3,500",1,2
+hector-215-55-r18,MG Hector,215/55 R18,"₹4,000–₹5,000",2,0
+cclass-225-50-r17,Mercedes-Benz C-Class,225/50 R17,"₹3,000–₹3,500",0,2
+cclass-225-45-r18,Mercedes-Benz C-Class,225/45 R18,"₹4,000–₹5,000",1,0
+eclass-245-45-r18,Mercedes-Benz E-Class,245/45 R18,"₹4,000–₹5,000",1,1
+bmw3-225-45-r18,BMW 3 Series,225/45 R18,"₹4,000–₹5,000",2,1
+bmw3-255-40-r18,BMW 3 Series,255/40 R18,"₹4,000–₹5,000",0,1
+bmw5-245-45-r18,BMW 5 Series,245/45 R18,"₹4,000–₹5,000",2,0
+bmw5-275-40-r18,BMW 5 Series,275/40 R18,"₹4,000–₹5,000",0,0
+a4-245-40-r18,Audi A4,245/40 R18,"₹4,000–₹5,000",1,1
+q3-235-55-r18,Audi Q3,235/55 R18,"₹4,000–₹5,000",2,1
+q5-235-60-r18,Audi Q5,235/60 R18,"₹4,000–₹5,000",0,2
+q5-255-45-r20,Audi Q5,255/45 R20,"₹6,000",1,0
+x1-225-55-r18,BMW X1,225/55 R18,"₹4,000–₹5,000",3,1
+glc-235-60-r18,Mercedes GLC,235/60 R18,"₹4,000–₹5,000",1,1
+glc-255-45-r20,Mercedes GLC,255/45 R20,"₹6,000",0,1
+fortuner-265-65-r17,Toyota Fortuner,265/65 R17,"₹3,000–₹3,500",2,1
+fortuner-265-60-r18,Toyota Fortuner,265/60 R18,"₹4,000–₹5,000",1,1
+defender-255-60-r20,Land Rover Defender,255/60 R20,"₹6,000",1,0
+defender-255-55-r21,Land Rover Defender,255/55 R21,Price on Request,0,0

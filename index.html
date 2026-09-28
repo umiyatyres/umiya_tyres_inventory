@@ -69,7 +69,7 @@
         <div class="section-head">
           <p class="eyebrow">Live stock</p>
           <h2>Tyres on hand</h2>
-          <p class="lede">Each size shows how many tyres are in the shop and how many are in the godown.</p>
+          <p class="lede">Each size shows how many tyres are in the shop and how many are in the godown. The list comes from the Google Sheet.</p>
         </div>
 
         <div class="toolbar">
@@ -86,6 +86,7 @@
 
         <div id="brand-filters" class="filters" role="group" aria-label="Filter by brand"></div>
         <p id="result-count" class="result-count"></p>
+        <p id="sheet-live" class="result-count" hidden>Loaded from the Google Sheet. A change in the sheet shows here when the page opens.</p>
 
         <div class="board-wrap">
           <div class="board-head cols">
@@ -200,7 +201,29 @@
     </div>
 
     <div id="panel-view" hidden>
-      <p class="note">Stock is saved in this browser. Export a backup before you switch computers.</p>
+      <div class="sheet-box">
+        <p class="note" id="sheet-status">This page shows only the Google Sheet. Paste the web app link to load stock.</p>
+        <form id="sheet-form" class="sheet-form">
+          <label class="field show-label grow" for="sheet-url">
+            <span>Google Sheet web app link</span>
+            <input id="sheet-url" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+          </label>
+          <button class="btn small" type="submit">Connect</button>
+        </form>
+        <div class="admin-tools">
+          <button type="button" class="btn ghost small" id="sheet-pull">Reload from sheet</button>
+          <button type="button" class="btn ghost small" id="sheet-push">Send this list to the sheet</button>
+        </div>
+        <details class="sheet-help">
+          <summary>How to connect Google Sheets</summary>
+          <ol>
+            <li>Create a Google Sheet. Use File, then Import, and upload <code>sheets/stock.csv</code> from this project. The columns are id, vehicle, size, price, shop, and godown.</li>
+            <li>Open Extensions, then Apps Script. Replace the sample code with <code>sheets/Code.gs</code>. Save.</li>
+            <li>Choose Deploy, then New deployment, then Web app. Run it as yourself. For access, choose Anyone, not Anyone with a Google account. Copy the link that ends in <code>/exec</code>. Opening that link in a private window should show the stock list, not “Access denied”.</li>
+            <li>Paste that link above and choose Connect. The site shows only the rows in that sheet. Adding or editing here writes the same rows back.</li>
+          </ol>
+        </details>
+      </div>
 
       <form id="add-form" class="add-form">
         <label class="field show-label vehicle" for="add-vehicle">
@@ -236,7 +259,6 @@
           Import
           <input id="import-file" type="file" accept="application/json,.json" hidden>
         </label>
-        <button type="button" class="btn ghost small" id="reset-stock">Restore samples</button>
         <button type="button" class="btn ghost small" id="sign-out">Sign out</button>
       </div>
 

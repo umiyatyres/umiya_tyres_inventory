@@ -1,62 +1,19 @@
-const STORAGE_KEY = "umiya-tyre-stock-v1";
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwJD7Lx5_GmfrLiFCgWbX0eQ5k0zrItPPLUGfWVrKQv-bgxuEKbF_JcSprNqdi5Mc-L/exec";
+const SHEET_URL_KEY = "umiya-sheet-url";
 const PASSWORD_KEY = "umiya-admin-password";
 const SESSION_KEY = "umiya-admin";
 const DEFAULT_PASSWORD = "umiya";
 
-const SEED = [
-  ["brezza-205-60-r16", "Maruti Brezza", "205/60 R16", "₹2,500", 5, 3],
-  ["ertiga-185-65-r15", "Maruti Ertiga", "185/65 R15", "₹2,300–₹2,500", 4, 2],
-  ["nios-175-60-r15", "Hyundai Grand i10 Nios", "175/60 R15", "₹2,300–₹2,500", 3, 2],
-  ["i20-195-55-r16", "Hyundai i20", "195/55 R16", "₹2,500", 5, 2],
-  ["venue-215-60-r16", "Hyundai Venue", "215/60 R16", "₹2,500", 2, 2],
-  ["creta-205-65-r16", "Hyundai Creta", "205/65 R16", "₹2,500", 6, 3],
-  ["creta-215-60-r17", "Hyundai Creta", "215/60 R17", "₹3,000–₹3,500", 2, 1],
-  ["sonet-215-60-r16", "Kia Sonet", "215/60 R16", "₹2,500", 4, 2],
-  ["seltos-215-60-r17", "Kia Seltos", "215/60 R17", "₹3,000–₹3,500", 1, 1],
-  ["punch-195-60-r16", "Tata Punch", "195/60 R16", "₹2,500", 6, 4],
-  ["nexon-215-60-r16", "Tata Nexon", "215/60 R16", "₹2,500", 3, 2],
-  ["xuv300-215-55-r17", "Mahindra XUV300", "215/55 R17", "₹3,000–₹3,500", 1, 3],
-  ["xuv700-235-65-r17", "Mahindra XUV700", "235/65 R17", "₹3,000–₹3,500", 3, 0],
-  ["xuv700-235-60-r18", "Mahindra XUV700", "235/60 R18", "₹4,000–₹5,000", 0, 2],
-  ["scorpio-245-65-r17", "Mahindra Scorpio-N", "245/65 R17", "₹3,000–₹3,500", 2, 2],
-  ["scorpio-255-60-r18", "Mahindra Scorpio-N", "255/60 R18", "₹4,000–₹5,000", 1, 0],
-  ["innova-205-65-r16", "Toyota Innova Crysta", "205/65 R16", "₹2,500", 4, 3],
-  ["hyryder-215-60-r17", "Toyota Hyryder", "215/60 R17", "₹3,000–₹3,500", 2, 3],
-  ["city-185-55-r16", "Honda City", "185/55 R16", "₹2,500", 6, 0],
-  ["amaze-175-65-r15", "Honda Amaze", "175/65 R15", "₹2,300–₹2,500", 5, 3],
-  ["hector-215-60-r17", "MG Hector", "215/60 R17", "₹3,000–₹3,500", 1, 2],
-  ["hector-215-55-r18", "MG Hector", "215/55 R18", "₹4,000–₹5,000", 2, 0],
-  ["cclass-225-50-r17", "Mercedes-Benz C-Class", "225/50 R17", "₹3,000–₹3,500", 0, 2],
-  ["cclass-225-45-r18", "Mercedes-Benz C-Class", "225/45 R18", "₹4,000–₹5,000", 1, 0],
-  ["eclass-245-45-r18", "Mercedes-Benz E-Class", "245/45 R18", "₹4,000–₹5,000", 1, 1],
-  ["bmw3-225-45-r18", "BMW 3 Series", "225/45 R18", "₹4,000–₹5,000", 2, 1],
-  ["bmw3-255-40-r18", "BMW 3 Series", "255/40 R18", "₹4,000–₹5,000", 0, 1],
-  ["bmw5-245-45-r18", "BMW 5 Series", "245/45 R18", "₹4,000–₹5,000", 2, 0],
-  ["bmw5-275-40-r18", "BMW 5 Series", "275/40 R18", "₹4,000–₹5,000", 0, 0],
-  ["a4-245-40-r18", "Audi A4", "245/40 R18", "₹4,000–₹5,000", 1, 1],
-  ["q3-235-55-r18", "Audi Q3", "235/55 R18", "₹4,000–₹5,000", 2, 1],
-  ["q5-235-60-r18", "Audi Q5", "235/60 R18", "₹4,000–₹5,000", 0, 2],
-  ["q5-255-45-r20", "Audi Q5", "255/45 R20", "₹6,000", 1, 0],
-  ["x1-225-55-r18", "BMW X1", "225/55 R18", "₹4,000–₹5,000", 3, 1],
-  ["glc-235-60-r18", "Mercedes GLC", "235/60 R18", "₹4,000–₹5,000", 1, 1],
-  ["glc-255-45-r20", "Mercedes GLC", "255/45 R20", "₹6,000", 0, 1],
-  ["fortuner-265-65-r17", "Toyota Fortuner", "265/65 R17", "₹3,000–₹3,500", 2, 1],
-  ["fortuner-265-60-r18", "Toyota Fortuner", "265/60 R18", "₹4,000–₹5,000", 1, 1],
-  ["defender-255-60-r20", "Land Rover Defender", "255/60 R20", "₹6,000", 1, 0],
-  ["defender-255-55-r21", "Land Rover Defender", "255/55 R21", "Price on Request", 0, 0]
-].map(([id, vehicle, size, price, shop, godown]) => ({ id, vehicle, size, price, shop, godown }));
-
 const state = {
-  items: loadStock(),
+  items: [],
   brand: "all",
   q: "",
   inStockOnly: false,
-  adminQ: ""
+  adminQ: "",
+  loading: false,
+  loaded: false,
+  sheetError: false
 };
-
-function cloneSeed() {
-  return SEED.map((item) => ({ ...item }));
-}
 
 function uid() {
   return "t-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
@@ -98,26 +55,13 @@ function totalOf(item) {
 function normalize(item) {
   const hasPlaces = Object.prototype.hasOwnProperty.call(item, "shop")
     || Object.prototype.hasOwnProperty.call(item, "godown");
-  let shop = qty(item.shop);
-  let godown = qty(item.godown);
-  if (!hasPlaces) {
-    const seed = SEED.find((entry) => entry.id === item.id);
-    const previous = qty(item.stock);
-    if (seed && previous === seed.shop + seed.godown) {
-      shop = seed.shop;
-      godown = seed.godown;
-    } else {
-      shop = previous;
-      godown = 0;
-    }
-  }
   return {
     id: String(item.id || uid()),
     vehicle: String(item.vehicle || "").trim(),
     size: String(item.size || "").trim(),
     price: String(item.price || "").trim(),
-    shop,
-    godown
+    shop: hasPlaces ? qty(item.shop) : qty(item.stock),
+    godown: hasPlaces ? qty(item.godown) : 0
   };
 }
 
@@ -125,16 +69,11 @@ function isUsable(item) {
   return Boolean(item.vehicle && item.size && item.price);
 }
 
-function loadStock() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return cloneSeed();
-  try {
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return cloneSeed();
-    return parsed.map(normalize).filter(isUsable);
-  } catch {
-    return cloneSeed();
-  }
+function applySheetItems(items) {
+  state.items = items.map(normalize).filter(isUsable);
+  state.loaded = true;
+  state.loading = false;
+  state.sheetError = false;
 }
 
 function availability(stock) {
@@ -167,11 +106,12 @@ function visibleItems() {
 }
 
 function renderStats() {
+  const ready = state.loaded && !state.loading && !state.sheetError;
   const shop = state.items.reduce((sum, item) => sum + item.shop, 0);
   const godown = state.items.reduce((sum, item) => sum + item.godown, 0);
-  document.getElementById("stat-shop").textContent = String(shop);
-  document.getElementById("stat-godown").textContent = String(godown);
-  document.getElementById("stat-units").textContent = String(shop + godown);
+  document.getElementById("stat-shop").textContent = ready ? String(shop) : "—";
+  document.getElementById("stat-godown").textContent = ready ? String(godown) : "—";
+  document.getElementById("stat-units").textContent = ready ? String(shop + godown) : "—";
 }
 
 function renderFilters() {
@@ -184,11 +124,24 @@ function renderFilters() {
   }).join("");
 }
 
+function boardMessage() {
+  if (state.loading) return "Loading stock from the Google Sheet…";
+  if (!sheetUrl()) return "Connect the Google Sheet in Admin. This page shows only that sheet.";
+  if (state.sheetError) return "The Google Sheet could not be loaded.";
+  if (!state.items.length) return "The Google Sheet has no tyre rows yet.";
+  return "";
+}
+
 function renderBoard() {
   const items = visibleItems();
   const noun = items.length === 1 ? "size" : "sizes";
-  document.getElementById("result-count").textContent = `Showing ${items.length} ${noun}`;
+  const waiting = boardMessage();
+  document.getElementById("result-count").textContent = waiting ? "" : `Showing ${items.length} ${noun}`;
   const board = document.getElementById("board");
+  if (waiting) {
+    board.innerHTML = `<p class="empty">${esc(waiting)}</p>`;
+    return;
+  }
   if (!items.length) {
     board.innerHTML = '<p class="empty">No tyres match that search.</p>';
     return;
@@ -250,12 +203,137 @@ function renderAdminList() {
 
 function persist(options) {
   const rerenderAdmin = !options || options.rerenderAdmin !== false;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+  const syncSheet = !options || options.sheet !== false;
   renderStats();
   renderFilters();
   renderBoard();
   const dialog = document.getElementById("admin-dialog");
   if (rerenderAdmin && dialog.open && isAuthed()) renderAdminList();
+  if (syncSheet) queueSheetPush();
+}
+
+function sheetUrl() {
+  const saved = (localStorage.getItem(SHEET_URL_KEY) || "").trim();
+  return saved || SHEET_URL;
+}
+
+function updateSheetStatus(mode) {
+  const connected = Boolean(sheetUrl());
+  const status = document.getElementById("sheet-status");
+  const live = document.getElementById("sheet-live");
+  live.hidden = !(connected && state.loaded && !state.sheetError);
+  if (!connected) {
+    status.textContent = "This page shows only the Google Sheet. Paste the web app link to load stock.";
+    return;
+  }
+  if (state.loading || mode === "loading") status.textContent = "Loading stock from the Google Sheet…";
+  else if (mode === "saving") status.textContent = "Saving this list to the Google Sheet…";
+  else if (mode === "error" || state.sheetError) status.textContent = "Connected, but the Google Sheet did not respond. Check the web app link.";
+  else if (!state.items.length) status.textContent = "Connected. The Google Sheet has no tyre rows yet. Add a size here and it is written to the sheet.";
+  else status.textContent = "Connected. The stock on this page is the Google Sheet.";
+}
+
+function pullFromSheet() {
+  const url = sheetUrl();
+  if (!url) return Promise.resolve(false);
+  state.loading = true;
+  state.sheetError = false;
+  persist({ sheet: false });
+  updateSheetStatus("loading");
+  return new Promise((resolve, reject) => {
+    const callback = "umiyaSheet_" + Date.now();
+    const script = document.createElement("script");
+    let settled = false;
+    const finish = (error, items) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      delete window[callback];
+      script.remove();
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(items);
+    };
+    const timer = setTimeout(() => finish(new Error("The sheet took too long")), 12000);
+    window[callback] = (data) => {
+      if (!Array.isArray(data)) {
+        finish(new Error("The sheet did not return a stock list"));
+        return;
+      }
+      finish(null, data);
+    };
+    script.onerror = () => finish(new Error("The sheet link could not be opened"));
+    const join = url.includes("?") ? "&" : "?";
+    script.src = url + join + "callback=" + callback;
+    document.body.appendChild(script);
+  }).then((items) => {
+    applySheetItems(items);
+    persist({ sheet: false });
+    updateSheetStatus("saved");
+    return true;
+  }).catch((error) => {
+    state.loading = false;
+    state.loaded = false;
+    state.sheetError = true;
+    state.items = [];
+    persist({ sheet: false });
+    updateSheetStatus("error");
+    throw error;
+  });
+}
+
+let sheetTimer;
+function queueSheetPush() {
+  if (!sheetUrl()) return;
+  updateSheetStatus("saving");
+  clearTimeout(sheetTimer);
+  sheetTimer = setTimeout(() => {
+    pushToSheet().catch(() => updateSheetStatus("error"));
+  }, 500);
+}
+
+function pushToSheet() {
+  const url = sheetUrl();
+  if (!url) return Promise.resolve(false);
+  return new Promise((resolve) => {
+    let settled = false;
+    const iframe = document.createElement("iframe");
+    const frameName = "umiyaSheetPost" + Date.now();
+    iframe.name = frameName;
+    iframe.hidden = true;
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = url;
+    form.target = frameName;
+    form.acceptCharset = "UTF-8";
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify({ items: state.items });
+    form.appendChild(input);
+    const finish = (ok) => {
+      if (settled) return;
+      settled = true;
+      form.remove();
+      iframe.remove();
+      updateSheetStatus(ok ? "saved" : "error");
+      resolve(ok);
+    };
+    let primed = false;
+    iframe.addEventListener("load", () => {
+      if (!primed) {
+        primed = true;
+        form.submit();
+        return;
+      }
+      finish(true);
+    });
+    document.body.append(iframe, form);
+    iframe.src = "about:blank";
+    setTimeout(() => finish(false), 10000);
+  });
 }
 
 function readQty(row, field) {
@@ -274,7 +352,17 @@ function readRow(row) {
   return { vehicle, size, price, shop, godown };
 }
 
+function requireSheet() {
+  if (sheetUrl()) return true;
+  toast("Connect the Google Sheet first. Stock is stored only there.");
+  return false;
+}
+
 function saveRow(row, id, options) {
+  if (!requireSheet()) {
+    renderAdminList();
+    return false;
+  }
   const next = readRow(row);
   if (!next) {
     toast("Enter vehicle, size, price, and shop and godown numbers from 0 to 9999");
@@ -324,6 +412,8 @@ function setCurrent(id) {
 }
 
 function init() {
+  localStorage.removeItem("umiya-tyre-stock-v1");
+  if (sheetUrl()) state.loading = true;
   renderStats();
   renderFilters();
   renderBoard();
@@ -392,6 +482,7 @@ function init() {
 
   document.getElementById("add-form").addEventListener("submit", (event) => {
     event.preventDefault();
+    if (!requireSheet()) return;
     const vehicle = document.getElementById("add-vehicle").value.trim();
     const size = document.getElementById("add-size").value.trim();
     const price = document.getElementById("add-price").value.trim();
@@ -440,6 +531,7 @@ function init() {
       return;
     }
     if (event.target.closest(".delete")) {
+      if (!requireSheet()) return;
       const button = event.target.closest(".delete");
       document.querySelectorAll(".delete[data-confirm]").forEach((other) => {
         if (other === button) return;
@@ -479,6 +571,7 @@ function init() {
       toast("That file is too large");
       return;
     }
+    if (!requireSheet()) return;
     const reader = new FileReader();
     reader.onload = () => {
       try {
@@ -487,8 +580,10 @@ function init() {
         const items = parsed.map(normalize).filter(isUsable);
         if (!items.length) throw new Error("empty");
         state.items = items;
+        state.loaded = true;
+        state.sheetError = false;
         persist();
-        toast("Backup restored");
+        toast("Backup sent to the Google Sheet");
       } catch {
         toast("That file is not a Umiya stock backup");
       }
@@ -496,19 +591,58 @@ function init() {
     reader.readAsText(file);
   });
 
-  const resetButton = document.getElementById("reset-stock");
-  resetButton.addEventListener("click", () => {
-    if (resetButton.dataset.confirm !== "yes") {
-      resetButton.dataset.confirm = "yes";
-      resetButton.textContent = "Confirm restore";
+  const sheetInput = document.getElementById("sheet-url");
+  sheetInput.value = sheetUrl();
+  updateSheetStatus();
+  document.getElementById("sheet-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const url = sheetInput.value.trim();
+    if (url && !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec\/?$/.test(url)) {
+      toast("Paste the web app link that ends in /exec");
       return;
     }
-    resetButton.removeAttribute("data-confirm");
-    resetButton.textContent = "Restore samples";
-    state.items = cloneSeed();
-    persist();
-    toast("Sample stock restored");
+    if (url) localStorage.setItem(SHEET_URL_KEY, url.replace(/\/$/, ""));
+    else localStorage.removeItem(SHEET_URL_KEY);
+    updateSheetStatus();
+    if (!url) {
+      state.items = [];
+      state.loaded = false;
+      state.loading = false;
+      state.sheetError = false;
+      persist({ sheet: false });
+      updateSheetStatus();
+      toast("Google Sheet disconnected");
+      return;
+    }
+    pullFromSheet()
+      .then((loaded) => {
+        if (loaded) toast("Connected. Stock loaded from the Google Sheet.");
+      })
+      .catch(() => toast("That link did not return the stock list"));
   });
+  document.getElementById("sheet-pull").addEventListener("click", () => {
+    if (!sheetUrl()) {
+      toast("Connect a Google Sheet first");
+      return;
+    }
+    pullFromSheet()
+      .then((loaded) => {
+        if (loaded) toast("Stock reloaded from the Google Sheet");
+      })
+      .catch(() => toast("Could not reload the Google Sheet"));
+  });
+  document.getElementById("sheet-push").addEventListener("click", () => {
+    if (!sheetUrl()) {
+      toast("Connect a Google Sheet first");
+      return;
+    }
+    pushToSheet().then((ok) => {
+      toast(ok ? "This list was sent to the Google Sheet" : "The sheet did not confirm the save");
+    });
+  });
+  if (sheetUrl()) {
+    pullFromSheet().catch(() => toast("Could not load the Google Sheet."));
+  }
 
   document.getElementById("password-form").addEventListener("submit", (event) => {
     event.preventDefault();

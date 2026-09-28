@@ -778,6 +778,46 @@ input[type="number"]::-webkit-inner-spin-button {
   margin-bottom: 16px;
 }
 
+.sheet-box {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sheet-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  margin: 10px 0;
+}
+
+.sheet-help {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.sheet-help summary {
+  cursor: pointer;
+  color: var(--text);
+  font-family: Oswald, Impact, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sheet-help ol {
+  margin: 8px 0 0;
+  padding-left: 1.2rem;
+}
+
+.sheet-help li + li {
+  margin-top: 6px;
+}
+
+.sheet-help code {
+  color: var(--text);
+}
+
 .admin-tools,
 .password-row {
   display: flex;
