@@ -488,7 +488,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .cols,
 .tyre {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.9fr) minmax(0, 0.95fr) minmax(132px, 0.7fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) minmax(0, 0.85fr) minmax(72px, 0.4fr) minmax(168px, 1fr);
   gap: 12px;
   align-items: center;
 }
@@ -507,10 +507,10 @@ input[type="number"]::-webkit-inner-spin-button {
   border-bottom: 1px solid var(--line);
 }
 
-.board-head span:nth-child(3),
-.board-head span:nth-child(4),
+.board-head span:nth-child(n+3),
 .tyre .price,
-.tyre .avail {
+.tyre .count,
+.tyre .where {
   text-align: right;
 }
 
@@ -547,6 +547,54 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .price-val {
   color: var(--orange);
+}
+
+.count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.count-val {
+  font-family: Oswald, Impact, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.where {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.place {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #1a1a1e;
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  font-family: Oswald, Impact, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+}
+
+.place.shop {
+  border-left-color: var(--orange);
+}
+
+.place.godown {
+  border-left-color: #d7d3cc;
+}
+
+.place-k {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .badge {
@@ -656,7 +704,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 #admin-dialog {
-  width: min(1080px, calc(100% - 24px));
+  width: min(1180px, calc(100% - 24px));
   max-height: min(920px, calc(100% - 24px));
   margin: auto;
   padding: 22px;
@@ -724,7 +772,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .add-form {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 92px auto;
+  grid-template-columns: 1.3fr 0.9fr 0.9fr 78px 88px auto;
   gap: 8px;
   align-items: end;
   margin-bottom: 16px;
@@ -750,7 +798,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .admin-head,
 .admin-row {
   display: grid;
-  grid-template-columns: minmax(140px, 1.5fr) minmax(110px, 1fr) minmax(120px, 1fr) 148px auto;
+  grid-template-columns: minmax(120px, 1.3fr) minmax(100px, 0.9fr) minmax(110px, 0.9fr) 136px 148px auto;
   gap: 8px;
   align-items: end;
 }
@@ -946,10 +994,13 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 
   .tyre .price,
-  .tyre .avail,
-  .board-head span:nth-child(3),
-  .board-head span:nth-child(4) {
+  .tyre .count,
+  .tyre .where,
+  .count,
+  .where {
     text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .tyre .vehicle {

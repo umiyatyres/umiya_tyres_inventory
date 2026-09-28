@@ -48,12 +48,12 @@
           </div>
           <dl class="stats">
             <div>
-              <dt>Sizes listed</dt>
-              <dd id="stat-sizes">0</dd>
+              <dt>In the shop</dt>
+              <dd id="stat-shop">0</dd>
             </div>
             <div>
-              <dt>Available sizes</dt>
-              <dd id="stat-available">0</dd>
+              <dt>In the godown</dt>
+              <dd id="stat-godown">0</dd>
             </div>
             <div>
               <dt>Tyres on hand</dt>
@@ -68,8 +68,8 @@
       <div class="wrap">
         <div class="section-head">
           <p class="eyebrow">Live stock</p>
-          <h2>Tyres in the shop</h2>
-          <p class="lede">Vehicle, size, and price for the second-hand tyres currently listed. Ask the shop to confirm a size before you visit.</p>
+          <h2>Tyres on hand</h2>
+          <p class="lede">Each size shows how many tyres are in the shop and how many are in the godown.</p>
         </div>
 
         <div class="toolbar">
@@ -92,7 +92,8 @@
             <span>Vehicle</span>
             <span>Tyre size</span>
             <span>Price</span>
-            <span>Availability</span>
+            <span>In stock</span>
+            <span>Where</span>
           </div>
           <div id="board">
             <p class="empty">Loading stock…</p>
@@ -187,7 +188,7 @@
     </div>
 
     <div id="login-view">
-      <p class="lede">Add a size or update how many tyres are on hand.</p>
+      <p class="lede">Add a size, or update how many tyres are in the shop and the godown.</p>
       <form id="login-form" class="stack">
         <label class="field show-label" for="password">
           <span>Password</span>
@@ -214,9 +215,13 @@
           <span>Price</span>
           <input id="add-price" type="text" required placeholder="₹2,500" autocomplete="off">
         </label>
-        <label class="field show-label" for="add-stock">
-          <span>Stock</span>
-          <input id="add-stock" type="number" min="0" max="9999" step="1" value="1" required>
+        <label class="field show-label" for="add-shop">
+          <span>Shop</span>
+          <input id="add-shop" type="number" min="0" max="9999" step="1" value="1" required>
+        </label>
+        <label class="field show-label" for="add-godown">
+          <span>Godown</span>
+          <input id="add-godown" type="number" min="0" max="9999" step="1" value="0" required>
         </label>
         <button class="btn" type="submit">Add tyre</button>
       </form>
@@ -248,7 +253,8 @@
         <span>Vehicle</span>
         <span>Tyre size</span>
         <span>Price</span>
-        <span>Qty</span>
+        <span>Shop</span>
+        <span>Godown</span>
         <span></span>
       </div>
       <div id="admin-list"></div>
