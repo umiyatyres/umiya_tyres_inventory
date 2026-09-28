@@ -713,6 +713,7 @@ input[type="number"]::-webkit-inner-spin-button {
   background: #101012;
   color: var(--text);
   box-shadow: var(--shadow);
+  overflow: auto;
 }
 
 #admin-dialog::backdrop {
@@ -882,9 +883,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 #admin-list {
-  max-height: 48vh;
-  overflow: auto;
-  padding-right: 4px;
+  overflow: visible;
 }
 
 .toast {
