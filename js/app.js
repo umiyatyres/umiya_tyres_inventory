@@ -237,31 +237,18 @@ function updateSheetStatus(mode) {
 function requestSheet() {
   const url = sheetUrl();
   if (!url) return Promise.reject(new Error("No sheet"));
-  return new Promise((resolve, reject) => {
-    const callback = "umiyaSheet_" + Date.now();
-    const script = document.createElement("script");
-    let settled = false;
-    const finish = (error, items) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      delete window[callback];
-      script.remove();
-      if (error) reject(error);
-      else resolve(items);
-    };
-    const timer = setTimeout(() => finish(new Error("The sheet took too long")), 20000);
-    window[callback] = (data) => {
-      if (!Array.isArray(data)) {
-        finish(new Error("The sheet did not return a stock list"));
-        return;
-      }
-      finish(null, data);
-    };
-    const join = url.includes("?") ? "&" : "?";
-    script.src = url + join + "callback=" + callback;
-    document.body.appendChild(script);
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+  return fetch(url, { redirect: "follow", signal: controller.signal })
+    .then((response) => {
+      if (!response.ok) throw new Error("The sheet did not load");
+      return response.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data)) throw new Error("The sheet did not return a stock list");
+      return data;
+    })
+    .finally(() => clearTimeout(timer));
 }
 
 function sameList(left, right) {
