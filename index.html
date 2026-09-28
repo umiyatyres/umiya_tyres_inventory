@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070708">
+  <meta name="description" content="Umiya Tyres is a second-hand tyre dealer in Borivali, Mumbai. Inspected tyres for hatchbacks, sedans, SUVs, and luxury cars, plus alignment, balancing, and flat tyre repair.">
+  <title>Umiya Tyres | Second-Hand Tyres in Mumbai</title>
+  <link rel="icon" href="assets/logo.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#stock">Skip to stock</a>
+
+  <header class="site-header" id="site-header">
+    <div class="bar">
+      <a class="brand" href="#top">
+        <img src="assets/logo.jpg" alt="" width="64" height="64">
+        <span class="brand-name">Umiya <em>Tyres</em></span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#stock" data-nav="stock">Stock</a>
+        <a href="#about" data-nav="about">About</a>
+        <a href="#services" data-nav="services">Services</a>
+        <button type="button" class="nav-btn" id="open-admin">Admin</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-logo">
+          <img src="assets/logo.jpg" alt="Umiya Tyre logo. Your Road, Our Tyres." width="1024" height="1024">
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Borivali, Mumbai</p>
+          <h1>The best second-hand tyre dealer in Mumbai</h1>
+          <p class="tagline">Your Road, Our Tyres</p>
+          <p class="lede">Reliable second-hand tyres for sedans, SUVs, off-road vehicles, luxury cars, and hatchbacks. Every tyre is inspected before it leaves the shop.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#stock">Browse stock</a>
+            <a class="btn ghost" href="#services">Tyre services</a>
+          </div>
+          <dl class="stats">
+            <div>
+              <dt>Sizes listed</dt>
+              <dd id="stat-sizes">0</dd>
+            </div>
+            <div>
+              <dt>Available sizes</dt>
+              <dd id="stat-available">0</dd>
+            </div>
+            <div>
+              <dt>Tyres on hand</dt>
+              <dd id="stat-units">0</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="stock" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Live stock</p>
+          <h2>Tyres in the shop</h2>
+          <p class="lede">Vehicle, size, and price for the second-hand tyres currently listed. Ask the shop to confirm a size before you visit.</p>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <label class="sr-only" for="search">Search by vehicle or tyre size</label>
+            <input id="search" type="search" placeholder="Search vehicle or size" autocomplete="off">
+            <button type="button" id="clear-search" hidden>Clear</button>
+          </div>
+          <label class="check" for="in-stock-only">
+            <input id="in-stock-only" type="checkbox">
+            In stock only
+          </label>
+        </div>
+
+        <div id="brand-filters" class="filters" role="group" aria-label="Filter by brand"></div>
+        <p id="result-count" class="result-count"></p>
+
+        <div class="board-wrap">
+          <div class="board-head cols">
+            <span>Vehicle</span>
+            <span>Tyre size</span>
+            <span>Price</span>
+            <span>Availability</span>
+          </div>
+          <div id="board">
+            <p class="empty">Loading stock…</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section section-alt">
+      <div class="wrap about-grid">
+        <div>
+          <p class="eyebrow">The shop</p>
+          <h2>Honest tyres. Fair prices.</h2>
+        </div>
+        <div class="prose">
+          <p>Why pay more for new tyres when you can get reliable second-hand tyres at affordable prices? At our tyre shop, we offer high-quality second-hand tyres that meet safety standards. As trusted second-hand tyre dealers in Mumbai, we inspect every tyre to ensure great performance. Whether for sedan cars, SUVs, off-road vehicles, luxury cars, or hatchbacks, we have the perfect fit. Our customers return for honest service and excellent value.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Borivali workshop</p>
+          <h2>Tyre repair services</h2>
+          <p class="lede">Don’t let tyre problems slow you down! Our tyre repair services in Borivali include 3D wheel alignment, balancing, automatic tyre changing, and flat tyre repair. Using advanced tools, we ensure quick and reliable solutions. Visit us today for expert tyre care!</p>
+        </div>
+        <div class="service-grid">
+          <article class="service">
+            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="14" cy="32" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="34" cy="32" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 16h32M24 16v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>3D wheel alignment</h3>
+            <p>Alignment with advanced tools so the car tracks straight.</p>
+          </article>
+          <article class="service">
+            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="24" r="3" fill="currentColor"/>
+              <path d="M24 6v6M24 36v6M6 24h6M36 24h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Balancing</h3>
+            <p>Wheel balancing for a smooth ride and even wear.</p>
+          </article>
+          <article class="service">
+            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M24 8v6M24 34v6M8 24h6M34 24h6" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <h3>Automatic tyre changing</h3>
+            <p>Machine tyre changes when you need a different size fitted.</p>
+          </article>
+          <article class="service">
+            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M24 14v20M14 24h20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Flat tyre repair</h3>
+            <p>Quick puncture repair so a flat does not hold you up.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="visit">
+      <div class="wrap visit-inner">
+        <p class="eyebrow on-orange">Umiya Tyres</p>
+        <h2>Your Road, Our Tyres</h2>
+        <p>Borivali, Mumbai. Browse the board, then visit the shop for a size, an alignment, or a flat repair.</p>
+        <a class="btn dark" href="#stock">See today’s stock</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>Umiya Tyres · Borivali, Mumbai</p>
+      <p>Second-hand tyres and tyre care</p>
+    </div>
+  </footer>
+
+  <dialog id="admin-dialog" aria-labelledby="admin-title">
+    <div class="dialog-top">
+      <div>
+        <p class="eyebrow">Shop desk</p>
+        <h2 id="admin-title">Stock manager</h2>
+      </div>
+      <button type="button" class="icon-btn" id="close-admin" aria-label="Close stock manager">×</button>
+    </div>
+
+    <div id="login-view">
+      <p class="lede">Add a size or update how many tyres are on hand.</p>
+      <form id="login-form" class="stack">
+        <label class="field show-label" for="password">
+          <span>Password</span>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn" type="submit">Unlock stock desk</button>
+        <p id="login-error" class="error" role="alert" hidden>That password is not right.</p>
+      </form>
+    </div>
+
+    <div id="panel-view" hidden>
+      <p class="note">Stock is saved in this browser. Export a backup before you switch computers.</p>
+
+      <form id="add-form" class="add-form">
+        <label class="field show-label vehicle" for="add-vehicle">
+          <span>Vehicle</span>
+          <input id="add-vehicle" type="text" required placeholder="Hyundai Creta" autocomplete="off">
+        </label>
+        <label class="field show-label" for="add-size">
+          <span>Tyre size</span>
+          <input id="add-size" type="text" required placeholder="205/65 R16" autocomplete="off">
+        </label>
+        <label class="field show-label" for="add-price">
+          <span>Price</span>
+          <input id="add-price" type="text" required placeholder="₹2,500" autocomplete="off">
+        </label>
+        <label class="field show-label" for="add-stock">
+          <span>Stock</span>
+          <input id="add-stock" type="number" min="0" max="9999" step="1" value="1" required>
+        </label>
+        <button class="btn" type="submit">Add tyre</button>
+      </form>
+
+      <div class="admin-tools">
+        <label class="search-wrap grow">
+          <span class="sr-only">Search stock desk</span>
+          <input id="admin-search" type="search" placeholder="Find a vehicle or size" autocomplete="off">
+        </label>
+        <button type="button" class="btn ghost small" id="export-stock">Export</button>
+        <label class="btn ghost small file-btn">
+          Import
+          <input id="import-file" type="file" accept="application/json,.json" hidden>
+        </label>
+        <button type="button" class="btn ghost small" id="reset-stock">Restore samples</button>
+        <button type="button" class="btn ghost small" id="sign-out">Sign out</button>
+      </div>
+
+      <form id="password-form" class="password-row">
+        <label class="field show-label grow" for="new-password">
+          <span>New password</span>
+          <input id="new-password" type="password" minlength="4" autocomplete="new-password" required>
+        </label>
+        <button class="btn ghost small" type="submit">Change password</button>
+      </form>
+
+      <p id="admin-count" class="result-count"></p>
+      <div class="admin-head">
+        <span>Vehicle</span>
+        <span>Tyre size</span>
+        <span>Price</span>
+        <span>Qty</span>
+        <span></span>
+      </div>
+      <div id="admin-list"></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript>
+    <p class="noscript">Turn on JavaScript to load the live stock board and the admin desk.</p>
+  </noscript>
+  <script src="js/app.js"></script>
+</body>
+</html>
