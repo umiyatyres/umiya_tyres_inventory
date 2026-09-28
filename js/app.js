@@ -213,8 +213,9 @@ function persist(options) {
 }
 
 function sheetUrl() {
-  const saved = (localStorage.getItem(SHEET_URL_KEY) || "").trim();
-  return saved || SHEET_URL;
+  const saved = (localStorage.getItem(SHEET_URL_KEY) || "").trim().replace(/\/$/, "");
+  if (saved && /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(saved)) return saved;
+  return SHEET_URL;
 }
 
 function updateSheetStatus(mode) {
@@ -249,7 +250,7 @@ function requestSheet() {
       if (error) reject(error);
       else resolve(items);
     };
-    const timer = setTimeout(() => finish(new Error("The sheet took too long")), 12000);
+    const timer = setTimeout(() => finish(new Error("The sheet took too long")), 20000);
     window[callback] = (data) => {
       if (!Array.isArray(data)) {
         finish(new Error("The sheet did not return a stock list"));
@@ -257,7 +258,6 @@ function requestSheet() {
       }
       finish(null, data);
     };
-    script.onerror = () => finish(new Error("The sheet link could not be opened"));
     const join = url.includes("?") ? "&" : "?";
     script.src = url + join + "callback=" + callback;
     document.body.appendChild(script);
@@ -291,6 +291,13 @@ function pullFromSheet() {
     updateSheetStatus("saved");
     return true;
   }).catch((error) => {
+    const saved = (localStorage.getItem(SHEET_URL_KEY) || "").trim();
+    if (saved && saved.replace(/\/$/, "") !== SHEET_URL) {
+      localStorage.removeItem(SHEET_URL_KEY);
+      const input = document.getElementById("sheet-url");
+      if (input) input.value = SHEET_URL;
+      return pullFromSheet();
+    }
     state.loading = false;
     state.loaded = false;
     state.sheetError = true;
