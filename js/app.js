@@ -233,13 +233,9 @@ function updateSheetStatus(mode) {
   else status.textContent = "Connected. The stock on this page is the Google Sheet.";
 }
 
-function pullFromSheet() {
+function requestSheet() {
   const url = sheetUrl();
-  if (!url) return Promise.resolve(false);
-  state.loading = true;
-  state.sheetError = false;
-  persist({ sheet: false });
-  updateSheetStatus("loading");
+  if (!url) return Promise.reject(new Error("No sheet"));
   return new Promise((resolve, reject) => {
     const callback = "umiyaSheet_" + Date.now();
     const script = document.createElement("script");
@@ -250,11 +246,8 @@ function pullFromSheet() {
       clearTimeout(timer);
       delete window[callback];
       script.remove();
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve(items);
+      if (error) reject(error);
+      else resolve(items);
     };
     const timer = setTimeout(() => finish(new Error("The sheet took too long")), 12000);
     window[callback] = (data) => {
@@ -268,7 +261,31 @@ function pullFromSheet() {
     const join = url.includes("?") ? "&" : "?";
     script.src = url + join + "callback=" + callback;
     document.body.appendChild(script);
-  }).then((items) => {
+  });
+}
+
+function sameList(left, right) {
+  const a = left.map(normalize).filter(isUsable);
+  const b = right.map(normalize).filter(isUsable);
+  if (a.length !== b.length) return false;
+  return a.every((item, index) => {
+    const other = b[index];
+    return item.id === other.id
+      && item.vehicle === other.vehicle
+      && item.size === other.size
+      && item.price === other.price
+      && item.shop === other.shop
+      && item.godown === other.godown;
+  });
+}
+
+function pullFromSheet() {
+  if (!sheetUrl()) return Promise.resolve(false);
+  state.loading = true;
+  state.sheetError = false;
+  persist({ sheet: false });
+  updateSheetStatus("loading");
+  return requestSheet().then((items) => {
     applySheetItems(items);
     persist({ sheet: false });
     updateSheetStatus("saved");
@@ -285,20 +302,33 @@ function pullFromSheet() {
 }
 
 let sheetTimer;
+let pushActive = false;
+let pushQueued = false;
+
 function queueSheetPush() {
   if (!sheetUrl()) return;
   updateSheetStatus("saving");
+  pushQueued = true;
+  if (pushActive) return;
   clearTimeout(sheetTimer);
-  sheetTimer = setTimeout(() => {
-    pushToSheet().catch(() => updateSheetStatus("error"));
-  }, 500);
+  sheetTimer = setTimeout(startPush, 400);
+}
+
+function startPush() {
+  if (!pushQueued || pushActive) return;
+  pushQueued = false;
+  pushActive = true;
+  pushToSheet().finally(() => {
+    pushActive = false;
+    if (pushQueued) startPush();
+  });
 }
 
 function pushToSheet() {
   const url = sheetUrl();
   if (!url) return Promise.resolve(false);
+  const expected = state.items.map((item) => ({ ...item }));
   return new Promise((resolve) => {
-    let settled = false;
     const iframe = document.createElement("iframe");
     const frameName = "umiyaSheetPost" + Date.now();
     iframe.name = frameName;
@@ -311,28 +341,46 @@ function pushToSheet() {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = "payload";
-    input.value = JSON.stringify({ items: state.items });
+    input.value = JSON.stringify({ items: expected });
     form.appendChild(input);
+    let settled = false;
+    const cleanup = () => {
+      form.remove();
+      iframe.remove();
+    };
     const finish = (ok) => {
       if (settled) return;
       settled = true;
-      form.remove();
-      iframe.remove();
+      cleanup();
       updateSheetStatus(ok ? "saved" : "error");
+      if (!ok) {
+        toast("The Google Sheet did not save that change");
+        if (!pushQueued) pullFromSheet().catch(() => {});
+      }
       resolve(ok);
     };
-    let primed = false;
-    iframe.addEventListener("load", () => {
-      if (!primed) {
-        primed = true;
-        form.submit();
-        return;
-      }
-      finish(true);
-    });
     document.body.append(iframe, form);
-    iframe.src = "about:blank";
-    setTimeout(() => finish(false), 10000);
+    form.submit();
+    let attempts = 0;
+    const confirmSave = () => {
+      if (settled) return;
+      attempts += 1;
+      requestSheet().then((items) => {
+        if (sameList(expected, items)) {
+          finish(true);
+          return;
+        }
+        if (attempts >= 8) {
+          finish(false);
+          return;
+        }
+        setTimeout(confirmSave, 1500);
+      }).catch(() => {
+        if (attempts >= 8) finish(false);
+        else setTimeout(confirmSave, 1500);
+      });
+    };
+    setTimeout(confirmSave, 1500);
   });
 }
 
