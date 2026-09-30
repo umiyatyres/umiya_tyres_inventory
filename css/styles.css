@@ -466,9 +466,13 @@ input:focus-visible {
 }
 
 .result-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--muted);
   font-size: 0.92rem;
   margin-bottom: 10px;
+  min-height: 1.2em;
 }
 
 .board-wrap {
@@ -640,6 +644,50 @@ input[type="number"]::-webkit-inner-spin-button {
 .empty {
   padding: 28px 18px;
   color: var(--muted);
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 42px 18px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.loader p {
+  margin: 0;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--line);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex: none;
+}
+
+.spinner-sm {
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+}
+
+.stats dd .spinner-sm {
+  margin-top: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
 }
 
 .about-grid {

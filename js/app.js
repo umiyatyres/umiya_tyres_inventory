@@ -105,13 +105,29 @@ function visibleItems() {
   });
 }
 
+function loaderHtml(message) {
+  return `<div class="loader" role="status"><span class="spinner" aria-hidden="true"></span><p>${esc(message)}</p></div>`;
+}
+
 function renderStats() {
-  const ready = state.loaded && !state.loading && !state.sheetError;
+  const ready = state.loaded && !state.sheetError;
   const shop = state.items.reduce((sum, item) => sum + item.shop, 0);
   const godown = state.items.reduce((sum, item) => sum + item.godown, 0);
-  document.getElementById("stat-shop").textContent = ready ? String(shop) : "—";
-  document.getElementById("stat-godown").textContent = ready ? String(godown) : "—";
-  document.getElementById("stat-units").textContent = ready ? String(shop + godown) : "—";
+  const setStat = (id, value) => {
+    const el = document.getElementById(id);
+    if (ready) {
+      el.textContent = String(value);
+      return;
+    }
+    if (state.loading) {
+      el.innerHTML = '<span class="spinner spinner-sm" aria-hidden="true"></span><span class="sr-only">Loading</span>';
+      return;
+    }
+    el.textContent = "—";
+  };
+  setStat("stat-shop", shop);
+  setStat("stat-godown", godown);
+  setStat("stat-units", shop + godown);
 }
 
 function renderFilters() {
@@ -125,10 +141,9 @@ function renderFilters() {
 }
 
 function boardMessage() {
-  if (state.loading) return "Loading stock from the Google Sheet…";
   if (!sheetUrl()) return "Connect the Google Sheet in Admin. This page shows only that sheet.";
   if (state.sheetError) return "The Google Sheet could not be loaded.";
-  if (!state.items.length) return "The Google Sheet has no tyre rows yet.";
+  if (!state.loading && state.loaded && !state.items.length) return "The Google Sheet has no tyre rows yet.";
   return "";
 }
 
@@ -136,11 +151,24 @@ function renderBoard() {
   const items = visibleItems();
   const noun = items.length === 1 ? "size" : "sizes";
   const waiting = boardMessage();
-  document.getElementById("result-count").textContent = waiting ? "" : `Showing ${items.length} ${noun}`;
+  const count = document.getElementById("result-count");
   const board = document.getElementById("board");
+  if (state.loading && !state.loaded) {
+    count.textContent = "";
+    board.setAttribute("aria-busy", "true");
+    board.innerHTML = loaderHtml("Loading stock from the Google Sheet…");
+    return;
+  }
+  board.setAttribute("aria-busy", state.loading ? "true" : "false");
   if (waiting) {
+    count.textContent = "";
     board.innerHTML = `<p class="empty">${esc(waiting)}</p>`;
     return;
+  }
+  if (state.loading) {
+    count.innerHTML = '<span class="spinner spinner-sm" aria-hidden="true"></span> Refreshing stock…';
+  } else {
+    count.textContent = `Showing ${items.length} ${noun}`;
   }
   if (!items.length) {
     board.innerHTML = '<p class="empty">No tyres match that search.</p>';
@@ -168,10 +196,23 @@ function adminItems() {
 }
 
 function renderAdminList() {
+  const count = document.getElementById("admin-count");
+  const list = document.getElementById("admin-list");
+  if (state.loading && !state.loaded) {
+    count.textContent = "";
+    list.setAttribute("aria-busy", "true");
+    list.innerHTML = loaderHtml("Loading stock from the Google Sheet…");
+    return;
+  }
   const items = adminItems();
   const noun = items.length === 1 ? "size" : "sizes";
-  document.getElementById("admin-count").textContent = `Editing ${items.length} ${noun}`;
-  document.getElementById("admin-list").innerHTML = items.map((item) => {
+  list.setAttribute("aria-busy", state.loading ? "true" : "false");
+  if (state.loading) {
+    count.innerHTML = '<span class="spinner spinner-sm" aria-hidden="true"></span> Refreshing stock…';
+  } else {
+    count.textContent = `Editing ${items.length} ${noun}`;
+  }
+  list.innerHTML = items.map((item) => {
     const label = `${item.vehicle} ${item.size}`;
     return `<div class="admin-row" data-id="${esc(item.id)}">
       <label class="field vehicle"><span>Vehicle</span><input data-field="vehicle" type="text" value="${esc(item.vehicle)}" aria-label="Vehicle for ${esc(label)}"></label>

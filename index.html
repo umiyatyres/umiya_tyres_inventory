@@ -56,15 +56,15 @@
           <dl class="stats">
             <div>
               <dt>In the shop</dt>
-              <dd id="stat-shop">0</dd>
+              <dd id="stat-shop"><span class="spinner spinner-sm" aria-hidden="true"></span><span class="sr-only">Loading</span></dd>
             </div>
             <div>
               <dt>In the godown</dt>
-              <dd id="stat-godown">0</dd>
+              <dd id="stat-godown"><span class="spinner spinner-sm" aria-hidden="true"></span><span class="sr-only">Loading</span></dd>
             </div>
             <div>
               <dt>Tyres on hand</dt>
-              <dd id="stat-units">0</dd>
+              <dd id="stat-units"><span class="spinner spinner-sm" aria-hidden="true"></span><span class="sr-only">Loading</span></dd>
             </div>
           </dl>
         </div>
@@ -103,8 +103,11 @@
             <span>In stock</span>
             <span>Where</span>
           </div>
-          <div id="board">
-            <p class="empty">Loading stock…</p>
+          <div id="board" aria-busy="true">
+            <div class="loader" role="status">
+              <span class="spinner" aria-hidden="true"></span>
+              <p>Loading stock from the Google Sheet…</p>
+            </div>
           </div>
         </div>
       </div>
