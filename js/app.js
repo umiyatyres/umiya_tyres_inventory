@@ -207,8 +207,7 @@ function persist(options) {
   renderStats();
   renderFilters();
   renderBoard();
-  const dialog = document.getElementById("admin-dialog");
-  if (rerenderAdmin && dialog.open && isAuthed()) renderAdminList();
+  if (rerenderAdmin && isAuthed()) renderAdminList();
   if (syncSheet) queueSheetPush();
 }
 
@@ -424,12 +423,28 @@ function saveRow(row, id, options) {
   return true;
 }
 
+function setSettingsOpen(open) {
+  document.getElementById("settings-panel").hidden = !open;
+  document.getElementById("open-settings").setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function setAddFormOpen(open) {
+  document.getElementById("add-form").hidden = !open;
+  document.getElementById("add-stock").setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function resetAddForm() {
+  const form = document.getElementById("add-form");
+  form.reset();
+  document.getElementById("add-shop").value = "1";
+  document.getElementById("add-godown").value = "0";
+}
+
 function showAdminState() {
   const authed = isAuthed();
   document.getElementById("login-view").hidden = authed;
   document.getElementById("panel-view").hidden = !authed;
   if (authed) renderAdminList();
-  else document.getElementById("password").focus();
 }
 
 let toastTimer;
@@ -446,11 +461,28 @@ function syncHeaderHeight() {
   document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
 }
 
+const VIEWS = ["stock", "about", "services", "admin"];
+
+function viewFromHash() {
+  const id = location.hash.replace("#", "");
+  return VIEWS.includes(id) ? id : "stock";
+}
+
 function setCurrent(id) {
   document.querySelectorAll("[data-nav]").forEach((link) => {
     if (link.dataset.nav === id) link.setAttribute("aria-current", "true");
     else link.removeAttribute("aria-current");
   });
+}
+
+function showView(id) {
+  const view = VIEWS.includes(id) ? id : "stock";
+  document.documentElement.dataset.page = view;
+  document.querySelectorAll("[data-view]").forEach((el) => {
+    el.hidden = !el.dataset.view.split(/\s+/).includes(view);
+  });
+  setCurrent(view);
+  window.scrollTo(0, 0);
 }
 
 function init() {
@@ -489,18 +521,7 @@ function init() {
     renderBoard();
   });
 
-  const dialog = document.getElementById("admin-dialog");
-  document.getElementById("open-admin").addEventListener("click", () => {
-    if (!dialog.open) dialog.showModal();
-    showAdminState();
-  });
-  document.getElementById("close-admin").addEventListener("click", () => dialog.close());
-  dialog.addEventListener("click", (event) => {
-    const rect = dialog.getBoundingClientRect();
-    const inside = event.clientX >= rect.left && event.clientX <= rect.right
-      && event.clientY >= rect.top && event.clientY <= rect.bottom;
-    if (!inside) dialog.close();
-  });
+  showAdminState();
 
   document.getElementById("login-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -519,7 +540,24 @@ function init() {
 
   document.getElementById("sign-out").addEventListener("click", () => {
     sessionStorage.removeItem(SESSION_KEY);
+    setAddFormOpen(false);
+    setSettingsOpen(false);
     showAdminState();
+  });
+
+  document.getElementById("open-settings").addEventListener("click", () => {
+    setSettingsOpen(document.getElementById("settings-panel").hidden);
+  });
+
+  document.getElementById("add-stock").addEventListener("click", () => {
+    const form = document.getElementById("add-form");
+    setAddFormOpen(form.hidden);
+    if (!form.hidden) document.getElementById("add-vehicle").focus();
+  });
+
+  document.getElementById("cancel-add").addEventListener("click", () => {
+    resetAddForm();
+    setAddFormOpen(false);
   });
 
   document.getElementById("add-form").addEventListener("submit", (event) => {
@@ -550,9 +588,8 @@ function init() {
       persist();
       toast("Tyre added to stock");
     }
-    event.target.reset();
-    document.getElementById("add-shop").value = "1";
-    document.getElementById("add-godown").value = "0";
+    resetAddForm();
+    setAddFormOpen(false);
   });
 
   document.getElementById("admin-list").addEventListener("click", (event) => {
@@ -704,17 +741,8 @@ function init() {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", syncHeaderHeight);
 
-  const observed = ["stock", "about", "services"]
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) setCurrent(entry.target.id);
-      });
-    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 });
-    observed.forEach((section) => observer.observe(section));
-  }
+  showView(viewFromHash());
+  window.addEventListener("hashchange", () => showView(viewFromHash()));
 }
 
 init();

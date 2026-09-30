@@ -26,6 +26,13 @@
   display: none !important;
 }
 
+html[data-page="stock"] [data-view]:not([data-view~="stock"]),
+html[data-page="about"] [data-view]:not([data-view~="about"]),
+html[data-page="services"] [data-view]:not([data-view~="services"]),
+html[data-page="admin"] [data-view]:not([data-view~="admin"]) {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -211,8 +218,7 @@ input:focus-visible {
   gap: 6px;
 }
 
-.nav a,
-.nav-btn {
+.nav a {
   appearance: none;
   background: none;
   border: 0;
@@ -227,8 +233,7 @@ input:focus-visible {
 }
 
 .nav a[aria-current="true"],
-.nav a:hover,
-.nav-btn:hover {
+.nav a:hover {
   color: var(--orange);
 }
 
@@ -365,6 +370,7 @@ input:focus-visible {
 
 .section {
   padding: 72px 0;
+  scroll-margin-top: var(--header-h);
 }
 
 .section-alt {
@@ -703,43 +709,6 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 0.95rem;
 }
 
-#admin-dialog {
-  width: min(1180px, calc(100% - 24px));
-  max-height: min(920px, calc(100% - 24px));
-  margin: auto;
-  padding: 22px;
-  border: 1px solid rgba(234, 104, 14, 0.5);
-  border-radius: 10px;
-  background: #101012;
-  color: var(--text);
-  box-shadow: var(--shadow);
-  overflow: auto;
-}
-
-#admin-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.76);
-}
-
-.dialog-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 3px;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--text);
-  font-size: 1.6rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
 .stack {
   display: grid;
   gap: 12px;
@@ -771,12 +740,32 @@ input[type="number"]::-webkit-inner-spin-button {
   text-transform: uppercase;
 }
 
+.desk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.settings-panel {
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
 .add-form {
   display: grid;
   grid-template-columns: 1.3fr 0.9fr 0.9fr 78px 88px auto;
   gap: 8px;
   align-items: end;
   margin-bottom: 16px;
+}
+
+.add-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .sheet-box {
@@ -961,7 +950,7 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 
   .add-form .vehicle,
-  .add-form .btn,
+  .add-form .add-actions,
   .admin-row .vehicle,
   .admin-row .qty-field,
   .admin-row .row-actions {
@@ -995,8 +984,7 @@ input[type="number"]::-webkit-inner-spin-button {
     gap: 0;
   }
 
-  .nav a,
-  .nav-btn {
+  .nav a {
     padding: 8px 4px;
     font-size: 0.92rem;
   }

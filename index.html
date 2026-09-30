@@ -12,13 +12,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function () {
+      var allowed = { stock: 1, about: 1, services: 1, admin: 1 };
+      var id = location.hash.replace("#", "");
+      document.documentElement.dataset.page = allowed[id] ? id : "stock";
+    })();
+  </script>
 </head>
 <body>
   <a class="skip" href="#stock">Skip to stock</a>
 
   <header class="site-header" id="site-header">
     <div class="bar">
-      <a class="brand" href="#top">
+      <a class="brand" href="#stock">
         <img src="assets/logo.jpg" alt="" width="64" height="64">
         <span class="brand-name">Umiya <em>Tyres</em></span>
       </a>
@@ -26,13 +33,13 @@
         <a href="#stock" data-nav="stock">Stock</a>
         <a href="#about" data-nav="about">About</a>
         <a href="#services" data-nav="services">Services</a>
-        <button type="button" class="nav-btn" id="open-admin">Admin</button>
+        <a href="#admin" data-nav="admin">Admin</a>
       </nav>
     </div>
   </header>
 
   <main id="top">
-    <section class="hero">
+    <section class="hero" data-view="stock">
       <div class="wrap hero-grid">
         <div class="hero-logo">
           <img src="assets/logo.jpg" alt="Umiya Tyre logo. Your Road, Our Tyres." width="1024" height="1024">
@@ -64,7 +71,7 @@
       </div>
     </section>
 
-    <section id="stock" class="section">
+    <section id="stock" class="section" data-view="stock">
       <div class="wrap">
         <div class="section-head">
           <p class="eyebrow">Live stock</p>
@@ -103,7 +110,7 @@
       </div>
     </section>
 
-    <section id="about" class="section section-alt">
+    <section id="about" class="section section-alt" data-view="about">
       <div class="wrap about-grid">
         <div>
           <p class="eyebrow">The shop</p>
@@ -115,7 +122,7 @@
       </div>
     </section>
 
-    <section id="services" class="section">
+    <section id="services" class="section" data-view="services">
       <div class="wrap">
         <div class="section-head">
           <p class="eyebrow">Borivali workshop</p>
@@ -162,7 +169,123 @@
       </div>
     </section>
 
-    <section class="visit">
+    <section id="admin" class="section section-alt" data-view="admin">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Shop desk</p>
+          <h2 id="admin-title">Stock manager</h2>
+          <p class="lede">Add a size, or update how many tyres are in the shop and how many are in the godown.</p>
+        </div>
+
+        <div id="login-view">
+          <form id="login-form" class="stack">
+            <label class="field show-label" for="password">
+              <span>Password</span>
+              <input id="password" type="password" autocomplete="current-password" required>
+            </label>
+            <button class="btn" type="submit">Unlock stock desk</button>
+            <p id="login-error" class="error" role="alert" hidden>That password is not right.</p>
+          </form>
+        </div>
+
+        <div id="panel-view" hidden>
+          <div class="desk-actions">
+            <button type="button" class="btn" id="add-stock" aria-expanded="false" aria-controls="add-form">Add stock</button>
+            <button type="button" class="btn ghost" id="open-settings" aria-expanded="false" aria-controls="settings-panel">Settings</button>
+          </div>
+
+          <div id="settings-panel" class="settings-panel" hidden>
+            <div class="sheet-box">
+              <p class="note" id="sheet-status">This page shows only the Google Sheet. Paste the web app link to load stock.</p>
+              <form id="sheet-form" class="sheet-form">
+                <label class="field show-label grow" for="sheet-url">
+                  <span>Google Sheet web app link</span>
+                  <input id="sheet-url" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+                </label>
+                <button class="btn small" type="submit">Connect</button>
+              </form>
+              <div class="admin-tools">
+                <button type="button" class="btn ghost small" id="sheet-pull">Reload from sheet</button>
+                <button type="button" class="btn ghost small" id="sheet-push">Send this list to the sheet</button>
+              </div>
+              <details class="sheet-help">
+                <summary>How to connect Google Sheets</summary>
+                <ol>
+                  <li>Create a Google Sheet and name the tab Stock. The columns are id, vehicle, size, price, shop, and godown.</li>
+                  <li>Open Extensions, then Apps Script. Replace the sample code with <code>sheets/Code.gs</code>. Save.</li>
+                  <li>Choose Deploy, then New deployment, then Web app. Run it as yourself. For access, choose Anyone, not Anyone with a Google account. Copy the link that ends in <code>/exec</code>. Opening that link in a private window should show the stock list, not “Access denied”.</li>
+                  <li>Paste that link above and choose Connect. The site shows only the rows in that sheet. Adding or editing here writes the same rows back.</li>
+                </ol>
+              </details>
+            </div>
+
+            <form id="password-form" class="password-row">
+              <label class="field show-label grow" for="new-password">
+                <span>New password</span>
+                <input id="new-password" type="password" minlength="4" autocomplete="new-password" required>
+              </label>
+              <button class="btn ghost small" type="submit">Change password</button>
+            </form>
+
+            <div class="admin-tools">
+              <button type="button" class="btn ghost small" id="export-stock">Export</button>
+              <label class="btn ghost small file-btn">
+                Import
+                <input id="import-file" type="file" accept="application/json,.json" hidden>
+              </label>
+              <button type="button" class="btn ghost small" id="sign-out">Sign out</button>
+            </div>
+          </div>
+
+          <form id="add-form" class="add-form" hidden>
+            <label class="field show-label vehicle" for="add-vehicle">
+              <span>Vehicle</span>
+              <input id="add-vehicle" type="text" required placeholder="Hyundai Creta" autocomplete="off">
+            </label>
+            <label class="field show-label" for="add-size">
+              <span>Tyre size</span>
+              <input id="add-size" type="text" required placeholder="205/65 R16" autocomplete="off">
+            </label>
+            <label class="field show-label" for="add-price">
+              <span>Price</span>
+              <input id="add-price" type="text" required placeholder="₹2,500" autocomplete="off">
+            </label>
+            <label class="field show-label" for="add-shop">
+              <span>Shop</span>
+              <input id="add-shop" type="number" min="0" max="9999" step="1" value="1" required>
+            </label>
+            <label class="field show-label" for="add-godown">
+              <span>Godown</span>
+              <input id="add-godown" type="number" min="0" max="9999" step="1" value="0" required>
+            </label>
+            <div class="add-actions">
+              <button class="btn" type="submit">Save</button>
+              <button class="btn ghost" type="button" id="cancel-add">Cancel</button>
+            </div>
+          </form>
+
+          <div class="admin-tools">
+            <label class="search-wrap grow">
+              <span class="sr-only">Search stock desk</span>
+              <input id="admin-search" type="search" placeholder="Find a vehicle or size" autocomplete="off">
+            </label>
+          </div>
+
+          <p id="admin-count" class="result-count"></p>
+          <div class="admin-head">
+            <span>Vehicle</span>
+            <span>Tyre size</span>
+            <span>Price</span>
+            <span>Shop</span>
+            <span>Godown</span>
+            <span></span>
+          </div>
+          <div id="admin-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="visit" data-view="about services">
       <div class="wrap visit-inner">
         <p class="eyebrow on-orange">Umiya Tyres</p>
         <h2>Your Road, Our Tyres</h2>
@@ -178,110 +301,6 @@
       <p>Second-hand tyres and tyre care</p>
     </div>
   </footer>
-
-  <dialog id="admin-dialog" aria-labelledby="admin-title">
-    <div class="dialog-top">
-      <div>
-        <p class="eyebrow">Shop desk</p>
-        <h2 id="admin-title">Stock manager</h2>
-      </div>
-      <button type="button" class="icon-btn" id="close-admin" aria-label="Close stock manager">×</button>
-    </div>
-
-    <div id="login-view">
-      <p class="lede">Add a size, or update how many tyres are in the shop and the godown.</p>
-      <form id="login-form" class="stack">
-        <label class="field show-label" for="password">
-          <span>Password</span>
-          <input id="password" type="password" autocomplete="current-password" required>
-        </label>
-        <button class="btn" type="submit">Unlock stock desk</button>
-        <p id="login-error" class="error" role="alert" hidden>That password is not right.</p>
-      </form>
-    </div>
-
-    <div id="panel-view" hidden>
-      <div class="sheet-box">
-        <p class="note" id="sheet-status">This page shows only the Google Sheet. Paste the web app link to load stock.</p>
-        <form id="sheet-form" class="sheet-form">
-          <label class="field show-label grow" for="sheet-url">
-            <span>Google Sheet web app link</span>
-            <input id="sheet-url" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
-          </label>
-          <button class="btn small" type="submit">Connect</button>
-        </form>
-        <div class="admin-tools">
-          <button type="button" class="btn ghost small" id="sheet-pull">Reload from sheet</button>
-          <button type="button" class="btn ghost small" id="sheet-push">Send this list to the sheet</button>
-        </div>
-        <details class="sheet-help">
-          <summary>How to connect Google Sheets</summary>
-          <ol>
-            <li>Create a Google Sheet and name the tab Stock. The columns are id, vehicle, size, price, shop, and godown.</li>
-            <li>Open Extensions, then Apps Script. Replace the sample code with <code>sheets/Code.gs</code>. Save.</li>
-            <li>Choose Deploy, then New deployment, then Web app. Run it as yourself. For access, choose Anyone, not Anyone with a Google account. Copy the link that ends in <code>/exec</code>. Opening that link in a private window should show the stock list, not “Access denied”.</li>
-            <li>Paste that link above and choose Connect. The site shows only the rows in that sheet. Adding or editing here writes the same rows back.</li>
-          </ol>
-        </details>
-      </div>
-
-      <form id="add-form" class="add-form">
-        <label class="field show-label vehicle" for="add-vehicle">
-          <span>Vehicle</span>
-          <input id="add-vehicle" type="text" required placeholder="Hyundai Creta" autocomplete="off">
-        </label>
-        <label class="field show-label" for="add-size">
-          <span>Tyre size</span>
-          <input id="add-size" type="text" required placeholder="205/65 R16" autocomplete="off">
-        </label>
-        <label class="field show-label" for="add-price">
-          <span>Price</span>
-          <input id="add-price" type="text" required placeholder="₹2,500" autocomplete="off">
-        </label>
-        <label class="field show-label" for="add-shop">
-          <span>Shop</span>
-          <input id="add-shop" type="number" min="0" max="9999" step="1" value="1" required>
-        </label>
-        <label class="field show-label" for="add-godown">
-          <span>Godown</span>
-          <input id="add-godown" type="number" min="0" max="9999" step="1" value="0" required>
-        </label>
-        <button class="btn" type="submit">Add tyre</button>
-      </form>
-
-      <div class="admin-tools">
-        <label class="search-wrap grow">
-          <span class="sr-only">Search stock desk</span>
-          <input id="admin-search" type="search" placeholder="Find a vehicle or size" autocomplete="off">
-        </label>
-        <button type="button" class="btn ghost small" id="export-stock">Export</button>
-        <label class="btn ghost small file-btn">
-          Import
-          <input id="import-file" type="file" accept="application/json,.json" hidden>
-        </label>
-        <button type="button" class="btn ghost small" id="sign-out">Sign out</button>
-      </div>
-
-      <form id="password-form" class="password-row">
-        <label class="field show-label grow" for="new-password">
-          <span>New password</span>
-          <input id="new-password" type="password" minlength="4" autocomplete="new-password" required>
-        </label>
-        <button class="btn ghost small" type="submit">Change password</button>
-      </form>
-
-      <p id="admin-count" class="result-count"></p>
-      <div class="admin-head">
-        <span>Vehicle</span>
-        <span>Tyre size</span>
-        <span>Price</span>
-        <span>Shop</span>
-        <span>Godown</span>
-        <span></span>
-      </div>
-      <div id="admin-list"></div>
-    </div>
-  </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <noscript>
